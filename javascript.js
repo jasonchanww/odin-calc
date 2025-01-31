@@ -1,6 +1,7 @@
 let storedVal = "";
 let displayVal = "0";
 let currentOp = "";
+let lastClickedOp = false;
 
 const calc = document.querySelector("#calc");
 calc.addEventListener('click', e => {
@@ -71,13 +72,13 @@ function clickedNumber(num) {
     else {
         displayVal += "" + num;
     }
-
+    lastClickedOp = false;
     updateDisplay();
 }
 
 function clickedOp(op){
     //op and store exists
-    if(currentOp && storedVal){
+    if(currentOp && storedVal && !lastClickedOp){
         evaluate();
         currentOp = op;
         storedVal = displayVal;
@@ -94,6 +95,7 @@ function clickedOp(op){
         storedVal = displayVal;
         displayVal = '0';
     }
+    lastClickedOp = true;
 }
 
 function evaluate(){
@@ -117,7 +119,7 @@ function evaluate(){
 }
 
 function clickedEquals(){
-    if(evaluate()) {
+    if(!lastClickedOp && evaluate()) {
         updateDisplay();
     }
 }
