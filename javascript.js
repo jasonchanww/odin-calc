@@ -48,8 +48,47 @@ calc.addEventListener('click', e => {
     }
 });
 
+document.addEventListener("keydown", (e) => {
+    console.log(e.key);
+    switch (e.key) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            clickedNumber(e.key);
+            break;
+        case '+':
+            clickedOp('+');
+            break;
+        case '-':
+            clickedOp('-');
+            break;
+        case '*':
+            clickedOp('*');
+            break;
+        case '/':
+            clickedOp('/');
+            break;
+        case 'Enter':
+            clickedEquals();
+            break;
+        case 'Backspace':
+            backspace();
+            break;
+        case '.':
+            decimal();
+            break;
+    }
+});
+
 function updateDisplay() {
-    const truncated = displayVal.substring(0,8);
+    const truncated = displayVal.substring(0, 8);
     document.querySelector("#value").textContent = truncated;
 }
 
@@ -76,9 +115,9 @@ function clickedNumber(num) {
     updateDisplay();
 }
 
-function clickedOp(op){
+function clickedOp(op) {
     //op and store exists
-    if(currentOp && storedVal && !lastClickedOp){
+    if (currentOp && storedVal && !lastClickedOp) {
         evaluate();
         currentOp = op;
         storedVal = displayVal;
@@ -86,11 +125,11 @@ function clickedOp(op){
         displayVal = '0';
     }
     //op exists -> replace
-    else if(currentOp){
+    else if (currentOp) {
         currentOp = op;
     }
     //add op, store val
-    else{
+    else {
         currentOp = op;
         storedVal = displayVal;
         displayVal = '0';
@@ -98,62 +137,62 @@ function clickedOp(op){
     lastClickedOp = true;
 }
 
-function evaluate(){
-    if(!currentOp || !storedVal || !displayVal) return false;
-    switch(currentOp){
+function evaluate() {
+    if (!currentOp || !storedVal || !displayVal) return false;
+    switch (currentOp) {
         case '+':
-        displayVal = "" + (+storedVal + +displayVal);
-        break;
+            displayVal = "" + (+storedVal + +displayVal);
+            break;
         case '-':
-        displayVal = "" + (+storedVal - +displayVal);
-        break;
+            displayVal = "" + (+storedVal - +displayVal);
+            break;
         case '*':
-        displayVal = "" + (+storedVal * +displayVal);
-        break;
+            displayVal = "" + (+storedVal * +displayVal);
+            break;
         case '/':
-        displayVal = "" + (+storedVal / +displayVal);
-        break;
+            displayVal = "" + (+storedVal / +displayVal);
+            break;
     }
     storedVal = currentOp = "";
     return true;
 }
 
-function clickedEquals(){
-    if(!lastClickedOp && evaluate()) {
+function clickedEquals() {
+    if (!lastClickedOp && evaluate()) {
         updateDisplay();
     }
 }
 
-function clickedSign(){
+function clickedSign() {
     //is 0 -> return
-    if(displayVal === "0") return;
+    if (displayVal === "0") return;
 
     const result = "" + - +displayVal;
-    if(+result){
+    if (+result) {
         displayVal = result;
         updateDisplay();
     }
 }
 
-function backspace(){
+function backspace() {
     //is 0 -> return
-    if(displayVal === "0") return;
+    if (displayVal === "0") return;
     //is single -> 0
-    if(displayVal.replaceAll(/[^0-9]/ig,'').length === 1) {
+    if (displayVal.replaceAll(/[^0-9]/ig, '').length === 1) {
         displayVal = '0'
         updateDisplay();
         return;
     }
     const result = displayVal.substring(0, displayVal.length - 1);
-    if(+result){
+    if (+result) {
         displayVal = result;
         updateDisplay();
     }
 }
 
-function decimal(){
+function decimal() {
     //has decimal -> return
-    if(displayVal.includes('.')) return;
+    if (displayVal.includes('.')) return;
     displayVal += '.';
     updateDisplay();
 }
